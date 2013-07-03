@@ -100,7 +100,7 @@ if(typeof console === "undefined") {
 			},
 			create: function (settings) {
 				// remove the previous one if it is using the same container
-				sameContainer = false;
+				var sameContainer = false;
 				for (var i=0, len = trees.length; i < len; i++) {
 					var internalTree = trees[i];
 					if (settings.container.is(internalTree.container)) {
@@ -230,6 +230,7 @@ if(typeof console === "undefined") {
 			},
 
 			getInitiallyLoadedNodes: function(){
+				this.initiallyLoadedNodes = [];
 				var that = this;
 				var fn = function (nodes){
 					for (var i = 0; i < nodes.length; i++) {
@@ -476,9 +477,9 @@ if(typeof console === "undefined") {
 			},
 
 			getSiblings: function(mixedNode){
-				node = this.getNode(mixedNode);
+				var node = this.getNode(mixedNode);
 				// get parent's children
-				siblings = (node.parent) ? node.parent.children : this.rootNode.children;
+				var siblings = (node.parent) ? node.parent.children : this.rootNode.children;
 				// remove the current node
 				for (var i = siblings.length - 1; i >= 0; i--){
 					if (siblings[i].id == node.id){
@@ -851,9 +852,9 @@ Vtree.plugins.defaults.core.node = {
 					// in case a child of child is treated first, adding it to nodeSource will produce a bug
 					// requested nodes should be in the order of hierarchy
 					var nodesData = this.getAjaxData(data);
-					requestedNodes = request.nodes.split(",");
+					var requestedNodes = request.nodes.split(",");
 					for (var i = 0; i < requestedNodes.length; i++) {
-						nodeId = requestedNodes[i];
+						var nodeId = requestedNodes[i];
 						var nodeData = nodesData[nodeId];
 						if (nodeData){
 							this.addDataToNodeSource(nodeData);
@@ -878,7 +879,7 @@ Vtree.plugins.defaults.core.node = {
 					}
 					if (nodeData.id) {
 						try{
-							nodeSource = this.getNode(nodeData.id);
+							var nodeSource = this.getNode(nodeData.id);
 							this.nodeStore._recBuildNodes( nodeSource, nodeSource.parents.concat(nodeSource), nodeData.nodes);
 						}catch(e){
 							// this is the case where we can't find the node in the nodeStore
@@ -892,7 +893,7 @@ Vtree.plugins.defaults.core.node = {
 							var that = this;
 							var fn = function (nodes, nodeId, children){
 								for (var i = 0; i < nodes.length; i++) {
-									node = nodes[i];
+									var node = nodes[i];
 									if (node.id === nodeId){
 										node.nodes = children;
 									}else if (node.hasChildren && node.nodes && node.nodes.length > 0 ){
@@ -968,7 +969,7 @@ Vtree.plugins.defaults.core.node = {
 					// triggered by the ajax plugin when we load children from the server after opening a folder
 					this.container.on("afterChildrenLoaded.node", function(e, tree, node){
 						for (var i = 0; i < node.children.length; i++) {
-							var child = node.children[i]
+							var child = node.children[i];
 							if (that.checkBehaviour === "checkChildren" && node.isChecked){
 								child.check(true);
 							}
@@ -994,7 +995,7 @@ Vtree.plugins.defaults.core.node = {
 				initiateCheckedNodes:function(){
 					var initiallyChecked = this.initiallyChecked,
 					i,id, node;
-					for (i=0, len = initiallyChecked.length; i < len; i++) {
+					for (var i=0, len = initiallyChecked.length; i < len; i++) {
 						id = initiallyChecked[i];
 						// don't throw an error if the node is not found
 						try{ node = this.getNode(id); } catch(event){}
@@ -1005,7 +1006,7 @@ Vtree.plugins.defaults.core.node = {
 				initiateDisabledNodes:function(){
 					var disabledCheckboxes = this.disabledCheckboxes,
 					i,id, node;
-					for (i=0, len = disabledCheckboxes.length; i < len; i++) {
+					for (var i=0, len = disabledCheckboxes.length; i < len; i++) {
 						id = disabledCheckboxes[i];
 						try{ node = this.getNode(id); }catch(event){}
 						if (typeof node != "undefined"){ node.disable(true); }
@@ -1042,7 +1043,7 @@ Vtree.plugins.defaults.core.node = {
 				},
 
 				_generateHTML: function(){
-					ul = this._call_prev();
+					var ul = this._call_prev();
 					// this is to style the tree when the checkbox is not here
 					if (!this.displayCheckbox){
 						ul.addClass("noCheckbox");
@@ -1066,7 +1067,7 @@ Vtree.plugins.defaults.core.node = {
 				// disable a node
 				disable: function(){
 					this.isDisabled = true;
-					this.getEl().addClass(this.tree.disabledClass)
+					this.getEl().addClass(this.tree.disabledClass);
 					if (this.tree.displayCheckbox) {
 						this.getEl().find("input[type=checkbox]").eq(0).prop("disabled", "disabled");
 					}
@@ -1301,6 +1302,8 @@ Vtree.plugins.defaults.core.node = {
 									checked: tree.initiallyChecked || []
 								};
 								Vtree.setCookie("Vtree", JSON.stringify(VtreeCookie), 7); // stored for a week
+								// this is for the tree to continue building when used in conjonction with the ajax plugin
+								tree.container.trigger("OpenNodesFromCookie.tree", [tree]);								
 							}
 						}else{
 							// we create the initial cookie
