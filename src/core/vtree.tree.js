@@ -64,6 +64,7 @@
 			},
 
 			getInitiallyLoadedNodes: function(){
+				this.initiallyLoadedNodes = [];
 				var that = this;
 				var fn = function (nodes){
 					for (var i = 0; i < nodes.length; i++) {

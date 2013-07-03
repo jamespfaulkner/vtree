@@ -69,7 +69,7 @@
 			},
 			create: function (settings) {
 				// remove the previous one if it is using the same container
-				sameContainer = false;
+				var sameContainer = false;
 				for (var i=0, len = trees.length; i < len; i++) {
 					var internalTree = trees[i];
 					if (settings.container.is(internalTree.container)) {

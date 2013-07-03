@@ -40,7 +40,7 @@
 					// triggered by the ajax plugin when we load children from the server after opening a folder
 					this.container.on("afterChildrenLoaded.node", function(e, tree, node){
 						for (var i = 0; i < node.children.length; i++) {
-							var child = node.children[i]
+							var child = node.children[i];
 							if (that.checkBehaviour === "checkChildren" && node.isChecked){
 								child.check(true);
 							}
@@ -66,7 +66,7 @@
 				initiateCheckedNodes:function(){
 					var initiallyChecked = this.initiallyChecked,
 					i,id, node;
-					for (i=0, len = initiallyChecked.length; i < len; i++) {
+					for (var i=0, len = initiallyChecked.length; i < len; i++) {
 						id = initiallyChecked[i];
 						// don't throw an error if the node is not found
 						try{ node = this.getNode(id); } catch(event){}
@@ -77,7 +77,7 @@
 				initiateDisabledNodes:function(){
 					var disabledCheckboxes = this.disabledCheckboxes,
 					i,id, node;
-					for (i=0, len = disabledCheckboxes.length; i < len; i++) {
+					for (var i=0, len = disabledCheckboxes.length; i < len; i++) {
 						id = disabledCheckboxes[i];
 						try{ node = this.getNode(id); }catch(event){}
 						if (typeof node != "undefined"){ node.disable(true); }
@@ -114,7 +114,7 @@
 				},
 
 				_generateHTML: function(){
-					ul = this._call_prev();
+					var ul = this._call_prev();
 					// this is to style the tree when the checkbox is not here
 					if (!this.displayCheckbox){
 						ul.addClass("noCheckbox");
@@ -138,7 +138,7 @@
 				// disable a node
 				disable: function(){
 					this.isDisabled = true;
-					this.getEl().addClass(this.tree.disabledClass)
+					this.getEl().addClass(this.tree.disabledClass);
 					if (this.tree.displayCheckbox) {
 						this.getEl().find("input[type=checkbox]").eq(0).prop("disabled", "disabled");
 					}

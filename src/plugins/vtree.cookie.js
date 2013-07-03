@@ -39,6 +39,8 @@
 									checked: tree.initiallyChecked || []
 								};
 								Vtree.setCookie("Vtree", JSON.stringify(VtreeCookie), 7); // stored for a week
+								// this is for the tree to continue building when used in conjonction with the ajax plugin
+								tree.container.trigger("OpenNodesFromCookie.tree", [tree]);								
 							}
 						}else{
 							// we create the initial cookie
